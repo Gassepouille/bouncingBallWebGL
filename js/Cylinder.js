@@ -1,4 +1,6 @@
+// class Cylinder
 function Cylinder(){
+	// Initialize cylinder
 	this.object3d={};
 	var geometry = new THREE.CylinderGeometry( 2, 2, 20, 32 );
 	var material = new THREE.MeshLambertMaterial( {color: 0xff00ff} );

@@ -1,4 +1,6 @@
+// Class Ball
 function Ball (){
+	// Initialize Ball
 	this.object3d = {};
 	this.prevBounceAngle = null;
 	var geometry = new THREE.SphereGeometry(1,32,32);
@@ -6,16 +8,27 @@ function Ball (){
 	this.object3d = new THREE.Mesh(geometry,material);
 	this.object3d.position.set(0,0,10);
 }
-Ball.prototype.update = function(delta,now){
-	var angle = now*Math.PI*2 *0.5;
-	this.object3d.position.x=15*Math.cos(angle);
-	this.object3d.position.z=15*Math.sin(angle);
 
+/**
+ * update the ball
+ * @param  {Number} delta - seconds between 2 iterations
+ * @param  {Number} now   - present time in seconds
+ */
+Ball.prototype.update = function(delta,now){
+	// set horizontal position
+	var angle = now*Math.PI*2 *0.5;
+	var radiusHorizontal = 15
+	this.object3d.position.x=radiusHorizontal*Math.cos(angle);
+	this.object3d.position.z=radiusHorizontal*Math.sin(angle);
+
+
+	// set vertical position
 	var bounceAngle = now*Math.PI*2*1.5;
 	bounceAngle = bounceAngle%(2*Math.PI) - Math.PI;
+	this.object3d.position.y = 8*Math.abs(Math.sin(bounceAngle))+this.object3d.geometry.parameters.radius;
 
-
-	if (this.prevBounceAngle) {
+	// play sound if needed
+	if (this.prevBounceAngle !== null ) {
 		if (bounceAngle>=0 && this.prevBounceAngle<0) {
 			this.playSound();
 		}
@@ -24,21 +37,31 @@ Ball.prototype.update = function(delta,now){
 		}
 	};
 	this.prevBounceAngle = bounceAngle;
-
-	this.object3d.position.y=8*Math.abs(Math.sin(bounceAngle))+this.object3d.geometry.parameters.radius;
-
 }
+
+/**
+ * Play the sound when the ball hit the ground
+ */
 Ball.prototype.playSound = function(){
-	if(this.object3d.children.length>0){
-		var children = this.object3d.children;
-		for (var i = 0; i < children.length; i++) {
-			if(children[i].type == 'Audio'){
-				if(children[i].isPlaying){
-					children[i].stop();
-					children[i].onEnded();
-				}
-				children[i].play();				
-			}
-		};
-	}	
+
+	// get children of object (ball here)
+	var children = this.object3d.children;
+
+	// traverse children 
+	for (var i = 0; i < children.length; i++) {
+		var child = children[i];
+
+		// check if children are audio type
+		if(child.type !== 'Audio') continue; 
+
+		// stop audio if already playing
+		if(child.isPlaying){
+			child.stop();
+			child.onEnded();
+		}
+		// play audio
+		child.play();				
+		
+	};
+	
 }

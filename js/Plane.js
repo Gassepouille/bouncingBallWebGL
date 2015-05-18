@@ -1,4 +1,6 @@
+// class Plane
 function Plane(){
+	// initialize plane
 	this.object3d = {};
 	var geometry = new THREE.PlaneGeometry( 75, 75, 100,100 );
 	var material = new THREE.MeshLambertMaterial( {color: 0x00ffff, side: THREE.DoubleSide} );
