@@ -28,7 +28,7 @@ var APP = {
 		});
 
 
-		var sound = new Sound(camera,ball,'sounds/376737_Skullbeatz___Bad_Cat_Maste.mp3')
+		var sound = new Sound(camera,ball,'sounds/jump.mp3')
 
 
 

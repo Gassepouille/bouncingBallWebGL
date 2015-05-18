@@ -12,31 +12,33 @@ Ball.prototype.update = function(delta,now){
 	this.object3d.position.z=15*Math.sin(angle);
 
 	var bounceAngle = now*Math.PI*2*1.5;
-	bounceAngle = bounceAngle%(2*Math.PI)  - Math.PI;
-	
+	bounceAngle = bounceAngle%(2*Math.PI) - Math.PI;
+
+
 	if (this.prevBounceAngle) {
 		if (bounceAngle>=0 && this.prevBounceAngle<0) {
-			console.log('bounce')
+			this.playSound();
+		}
+		if (bounceAngle<=0 && this.prevBounceAngle>0) {
+			this.playSound();
 		}
 	};
 	this.prevBounceAngle = bounceAngle;
 
-
 	this.object3d.position.y=8*Math.abs(Math.sin(bounceAngle))+this.object3d.geometry.parameters.radius;
 
-	// if(this.object3d.children.length>0) this.playSound(this.object3d.children);
-
 }
-Ball.prototype.playSound = function(children){
-	for (var i = 0; i < children.length; i++) {
-		if(this.object3d.children[i].type == 'audio'){
-			
-			if(this.object3d.position.y<=0.1){
-
-			}else{
-	
+Ball.prototype.playSound = function(){
+	if(this.object3d.children.length>0){
+		var children = this.object3d.children;
+		for (var i = 0; i < children.length; i++) {
+			if(children[i].type == 'Audio'){
+				if(children[i].isPlaying){
+					children[i].stop();
+					children[i].onEnded();
+				}
+				children[i].play();				
 			}
-		}
-	};
-	
+		};
+	}	
 }
